@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ "$EUID" -eq 0 ]]; then
+	# TODO: proper warning format and ask to continue
+	echo 'This script should not be run as root!'
+	exit 1
+fi
+
+if ! python3 --version &>/dev/null && true; then
+	echo 'This script requires python3 to be installed'
+	exit 1
+fi
+
+if ! python3 -c "import sys; from importlib import util; sys.exit(not util.find_spec('pip'))" && true; then
+	echo 'This script requires pip to be installed'
+	exit 1
+fi
+
+echo 'Setting up virtual environment...'
+python3 -m venv venv
+source ./venv/bin/activate &>/dev/null
+
+echo 'Installing ansible...'
+python3 -m pip -q install --upgrade pip
+python3 -m pip -q --require-virtualenv install ansible
+
+ansible-pull --directory "$HOME/a-dotfiles" --only-if-changed --inventory inventory.ini --url 'https://github.com/ow9t/dotfiles' dotfiles.yml
+
+echo 'Cleaning up virtual environment...'
+deactivate
+rm -rf venv
+
+exit 0

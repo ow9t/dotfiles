@@ -1,0 +1,24 @@
+---
+- block:
+    - name: Check if homebrew is installed
+      community.general.homebrew:
+        update_homebrew: true
+      register: result
+      changed_when: result.msg != 'Homebrew would be updated.'
+      check_mode: true
+
+  rescue:
+    - name: Download homebrew install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/Homebrew/install/aceed88a4a062e2b41dc40a7428c71309fce14c9/install.sh
+        dest: /tmp/install.sh
+        checksum: sha256:82c6a60304bd39398d40d74a3657cc7031aa8fbef7f14d8a90c2507274fe1483
+
+    - name: Run install script
+      ansible.builtin.command: NONINTERACTIVE=1 /bin/bash -c /tmp/install.sh
+
+- name: Update homebrew
+  community.general.homebrew:
+    update_homebrew: true
+  register: result
+  changed_when: result.msg != 'Homebrew already up-to-date.'
