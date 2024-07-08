@@ -1,0 +1,61 @@
+---
+- name: Create `$HOME/.cache/zsh/zcompcache` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.cache/zsh/zcompcache"
+    recurse: true
+    state: directory
+    mode: '0755'
+
+- name: Create `$HOME/.config/zsh/.zshrc.d` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create `$HOME/.local/share/zsh` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/share/zsh"
+    recurse: true
+    state: directory
+    mode: '0755'
+
+- name: Create `$HOME/.local/state/zsh` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/state/zsh"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `.zshenv`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/zsh/files/dot-zshenv"
+    dest: "{{ ansible_env.HOME }}/.zshenv"
+    state: link
+
+- name: Create symbolic link to `.zshrc`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/zsh/files/dot-zshrc"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc"
+    state: link
+
+- name: Create symbolic link to `10-history.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/zsh/files/10-history.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/10-history.zsh"
+    state: link
+
+- name: Create symbolic link to `20-completion.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/zsh/files/20-completion.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/20-completion.zsh"
+    state: link
+
+- name: Create symbolic link to `50-fzf.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/zsh/files/50-fzf.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/50-fzf.zsh"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

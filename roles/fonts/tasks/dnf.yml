@@ -1,0 +1,26 @@
+---
+- name: Set fonts path
+  ansible.builtin.set_fact:
+    fonts_path: "{{ ansible_env.HOME }}/.local/share/fonts/JetBrainsMono Nerd Font"
+
+- name: Create fonts directory
+  ansible.builtin.file:
+    path: "{{ fonts_path }}"
+    state: directory
+    mode: '0775'
+    recurse: true
+
+- name: Download JetBrainsMono Nerd Font archive
+  ansible.builtin.get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+    dest: /tmp/JetBrainsMono.zip
+    checksum: sha256:6596922aabaf8876bb657c36a47009ac68c388662db45d4ac05c2536c2f07ade
+
+- name: Unarchive JetBrainsMono Nerd Font archive
+  ansible.builtin.unarchive:
+    src: /tmp/JetBrainsMono.zip
+    dest: "{{ fonts_path }}"
+    remote_src: true
+
+- name: Rebuild font information cache
+  ansible.builtin.command: 'fc-cache -v'

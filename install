@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1091 # https://github.com/koalaman/shellcheck/wiki/SC1091
+
+set -euo pipefail
+
+abort() {
+  printf "%s\n" "$@" >&2
+  exit 1
+}
+
+# Check if script is run as root
+if [[ "$EUID" -eq 0 ]]
+then
+  abort 'This script should not be run as root.'
+fi
+
+# Check if python3 is installed
+if ! python3 --version &>/dev/null && true
+then
+  abort 'python3 is required to run this script.'
+fi
+
+# Check if pip is installed
+if ! python3 -c "import sys; from importlib import util; sys.exit(not util.find_spec('pip'))" && true
+then
+  abort 'pip is required to run this script.'
+fi
+
+echo 'Setting up virtual environment...'
+python3 -m venv venv
+source ./venv/bin/activate &>/dev/null
+
+echo 'Installing ansible...'
+python3 -m pip -q install --upgrade pip
+python3 -m pip -q --require-virtualenv install ansible
+
+# TODO: fetch key and use verify-commit
+# ansible-pull --directory="$HOME/.dotfiles" --only-if-changed --inventory=inventory.ini --url='https://github.com/ow9t/dotfiles' --verify-commit dotfiles.yml
+ansible-pull --directory="$HOME/.dotfiles" --only-if-changed --inventory=inventory.ini --url='https://github.com/ow9t/dotfiles' dotfiles.yml
+
+echo 'Cleaning up virtual environment...'
+deactivate
+rm -rf venv

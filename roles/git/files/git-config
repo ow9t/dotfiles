@@ -1,0 +1,59 @@
+[user]
+	useConfigOnly = true
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+[color]
+	ui = auto
+[color "status"]
+	untracked = cyan normal
+[init]
+	defaultBranch = main
+[blame]
+	date = relative
+[branch]
+	sort = -committerdate
+[commit]
+	verbose = true
+[diff]
+	algorithm = histogram
+	colorMoved = zebra
+	colorMovedWS = allow-indentation-change
+[fetch]
+	writeCommitGraph = true
+[log]
+	date = iso
+[merge]
+	conflictStyle = zdiff3
+[rebase]
+	autosquash = true
+	updateRefs = true
+[rerere]
+	enabled = true
+[tag]
+	sort = -taggerdate
+[alias]
+	last = log -1 --stat
+	ll = log --abbrev-commit --date=relative --graph --pretty=format:'%Cred%h%Creset -%C(yellow) %d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset'
+[delta]
+	features = decorations
+	navigate = true
+[delta "decorations"]
+	file-style = omit
+	hunk-header-decoration-style = blue
+	hunk-header-line-number-style = brightcyan
+	hunk-header-style = file line-number syntax
+	keep-plus-minus-markers = true
+	line-numbers = true
+[delta "interactive"]
+	keep-plus-minus-markers = false
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[includeIf "gitdir:~/Code/public/"]
+	path = ~/Code/public/.gitconfig
+[includeIf "gitdir:~/Code/work/"]
+	path = ~/Code/work/.gitconfig

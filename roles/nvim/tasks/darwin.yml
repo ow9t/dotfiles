@@ -1,0 +1,11 @@
+---
+- name: Install neovim, luajit, and language servers
+  community.general.homebrew:
+    name:
+      - kotlin-language-server
+      - luajit
+      - neovim
+      - pyright
+      - rust-analyzer
+      - typescript-language-server
+    state: latest

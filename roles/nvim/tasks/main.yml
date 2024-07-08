@@ -1,0 +1,82 @@
+---
+- name: Create `$HOME/.config/nvim/lua/plugins` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `init.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/init.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+    state: link
+
+- name: Create symbolic link to `cloak.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/cloak.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/cloak.lua"
+    state: link
+
+- name: Create symbolic link to `colorscheme.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/colorscheme.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/colorscheme.lua"
+    state: link
+
+- name: Create symbolic link to `completion.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/completion.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/completion.lua"
+    state: link
+
+- name: Create symbolic link to `gitsigns.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/gitsigns.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/gitsigns.lua"
+    state: link
+
+- name: Create symbolic link to `lsp.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/lsp.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/lsp.lua"
+    state: link
+
+- name: Create symbolic link to `neorg.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/neorg.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/neorg.lua"
+    state: link
+
+- name: Create symbolic link to `statusline.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/statusline.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/statusline.lua"
+    state: link
+
+- name: Create symbolic link to `telescope.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/telescope.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/telescope.lua"
+    state: link
+
+- name: Create symbolic link to `comments.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/comments.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/comments.lua"
+    state: link
+
+- name: Create symbolic link to `treesitter.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/treesitter.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/treesitter.lua"
+    state: link
+
+- name: Create symbolic link to `vim-tmux-navigator.lua`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/nvim/files/vim-tmux-navigator.lua"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/vim-tmux-navigator.lua"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

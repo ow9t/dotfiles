@@ -1,0 +1,322 @@
+---
+- name: Create symbolic link to `.hushlogin`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/system/files/dot-hushlogin"
+    dest: "{{ ansible_env.HOME }}/.hushlogin"
+    state: link
+
+- name: Create `$HOME/.config/amethyst` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/amethyst"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `amethyst.yml`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/system/files/amethyst.yml"
+    dest: "{{ ansible_env.HOME }}/.config/amethyst/amethyst.yml"
+    state: link
+
+- name: Install amethyst tiling window manager
+  community.general.homebrew_cask:
+    name:
+      - amethyst
+    state: latest
+
+- name: Create `$HOME/.config/skhd` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/skhd"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `skhdrc`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/system/files/skhdrc"
+    dest: "{{ ansible_env.HOME }}/.config/skhd/skhdrc"
+    state: link
+
+- name: Install skhd simple hotkey daemon
+  community.general.homebrew:
+    name:
+      - koekeishiya/formulae/skhd
+    state: latest
+
+# TODO: start amethyst and skhd
+
+- name: Set interfacd style to `Dark`
+  community.general.osx_defaults:
+    key: AppleInterfaceStyle
+    type: string
+    value: Dark
+    state: present
+
+- name: Disable "natural" scrolling
+  community.general.osx_defaults:
+    key: com.apple.swipescrolldirection
+    type: bool
+    value: false
+    state: present
+
+- name: Disable press-and-hold for keys in favor of key repeat
+  community.general.osx_defaults:
+    key: ApplePressAndHoldEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Set initial key repeat time
+  community.general.osx_defaults:
+    key: InitialKeyRepeat
+    type: int
+    value: 32
+    state: present
+
+- name: Set key repeat time
+  community.general.osx_defaults:
+    key: KeyRepeat
+    type: int
+    value: 4
+    state: present
+
+- name: Enable keyboard navigation
+  community.general.osx_defaults:
+    key: AppleKeyboardUIMode
+    type: int
+    value: 2
+    state: present
+
+- name: Disable Apple Live Text
+  community.general.osx_defaults:
+    key: AppleLiveTextEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable automatic capitalization
+  community.general.osx_defaults:
+    key: NSAutomaticCapitalizationEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable smart dashes
+  community.general.osx_defaults:
+    key: NSAutomaticDashSubstitutionEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable inline predictive text
+  community.general.osx_defaults:
+    key: NSAutomaticInlinePredictionEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable inline predictive text
+  community.general.osx_defaults:
+    key: NSAutomaticPeriodSubstitutionEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable smart quotes
+  community.general.osx_defaults:
+    key: NSAutomaticQuoteSubstitutionEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Disable automatic spelling correction
+  community.general.osx_defaults:
+    key: NSAutomaticSpellingCorrectionEnabled
+    type: bool
+    value: false
+    state: present
+
+- name: Set the Dock position to `left`
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: orientation
+    type: string
+    value: left
+    state: present
+
+- name: Autohide the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: autohide
+    type: bool
+    value: true
+    state: present
+
+- name: Change the Dock autohide delay
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: autohide-delay
+    type: float
+    value: 0
+    state: present
+
+- name: Change the Dock opening and closing animation time
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: autohide-time-modifier
+    type: float
+    value: 0
+    state: present
+
+- name: Only show active applications in the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: static-only
+    type: bool
+    value: true
+    state: present
+
+- name: Do not show recently used apps in a separate section of the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: show-recents
+    type: bool
+    value: false
+    state: present
+
+- name: Minimize windows into their application's icon
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: minimize-to-application
+    type: bool
+    value: true
+    state: present
+
+- name: Disable automatic rearranging of Spaces
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: mru-spaces
+    type: bool
+    value: false
+    state: present
+
+- name: Set the icon size for the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: tilesize
+    type: int
+    value: 48
+    state: present
+
+- name: Lock contents of the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: contents-immutable
+    type: bool
+    value: true
+    state: present
+
+- name: Lock position of the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: position-immutable
+    type: bool
+    value: true
+    state: present
+
+- name: Lock size of the Dock
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: size-immutable
+    type: bool
+    value: true
+    state: present
+
+- name: Set Fn key function to `Do Nothing`
+  community.general.osx_defaults:
+    domain: com.apple.HIToolbox 
+    key: AppleFnUsageType
+    type: int
+    value: 0
+    state: present
+
+- name: Blacklist apps from showing Siri suggestions
+  community.general.osx_defaults:
+    domain: com.apple.suggestions
+    key: AppCanShowSiriSuggestionsBlacklist
+    type: array
+    value:
+      - '"com.apple.iBooksX"'
+      - '"com.apple.iCal"'
+      - '"com.apple.AddressBook"'
+      - '"com.apple.FaceTime"'
+      - '"com.apple.mail"'
+      - '"com.apple.Maps"'
+      - '"com.apple.MobileSMS"'
+      - '"com.apple.podcasts"'
+      - '"com.apple.reminders"'
+      - '"com.apple.Safari"'
+    state: present
+
+- name: Blacklist apps Siri can learn from
+  community.general.osx_defaults:
+    domain: com.apple.suggestions
+    key: SiriCanLearnFromAppBlacklist
+    type: array
+    value:
+      - '"com.apple.iBooksX"'
+      - '"com.apple.iCal"'
+      - '"com.apple.AddressBook"'
+      - '"com.apple.FaceTime"'
+      - '"com.apple.helpviewer"'
+      - '"com.apple.mail"'
+      - '"com.apple.Maps"'
+      - '"com.apple.MobileSMS"'
+      - '"com.apple.Notes"'
+      - '"com.apple.Photos"'
+      - '"com.apple.podcasts"'
+      - '"com.apple.Safari"'
+      - '"com.apple.reminders"'
+      - '"com.apple.shortcuts"'
+      - '"com.apple.systempreferences"'
+      - '"com.apple.tips"'
+      - '"com.microsoft.Outlook"'
+    state: present
+
+- name: Restart the Dock
+  ansible.builtin.command: killall Dock
+
+- name: Install browsers
+  community.general.homebrew_cask:
+    name:
+      - browsers-software/tap/browsers
+      - firefox
+      - LibreWolf
+    state: latest
+
+- name: Remove quarantine from `Browsers.app`
+  ansible.builtin.command: xattr -d com.apple.quarantine /Applications/Browsers.app
+  register: result
+  failed_when:
+    - result.rc != 0
+    - "'xattr: /Applications/Browsers.app: No such xattr: com.apple.quarantine' not in result.stderr_lines"
+
+- name: Remove quarantine from `Firefox.app`
+  ansible.builtin.command: xattr -d com.apple.quarantine /Applications/Firefox.app
+  register: result
+  failed_when:
+    - result.rc != 0
+    - "'xattr: /Applications/Firefox.app: No such xattr: com.apple.quarantine' not in result.stderr_lines"
+
+- name: Remove quarantine from `LibreWolf.app`
+  ansible.builtin.command: xattr -d com.apple.quarantine /Applications/LibreWolf.app
+  register: result
+  failed_when:
+    - result.rc != 0
+    - "'xattr: /Applications/LibreWolf.app: No such xattr: com.apple.quarantine' not in result.stderr_lines"
+
+- name: Install KeepassXC
+  community.general.homebrew_cask:
+    name:
+      - keepassxc
+    state: latest

@@ -1,0 +1,10 @@
+---
+- name: dotfiles
+  hosts: localhost
+  roles:
+    - role: git
+    - role: gnupg
+    - role: terminal
+    - role: tmux
+    - role: nvim
+    - role: system

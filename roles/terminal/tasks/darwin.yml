@@ -1,0 +1,38 @@
+---
+- name: Install cli tools and starship prompt
+  community.general.homebrew:
+    name:
+      - bat
+      - coreutils
+      - dust
+      - eza
+      - gnu-tar
+      - gnu-which
+      - grep
+      - hexyl
+      - less
+      - procs
+      - ripgrep
+      - starship
+      - trash
+      - xh
+    state: latest
+
+- name: Create symbolic link to `60-gnu-utils.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/terminal/files/60-gnu-utils.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/60-gnu-utils.zsh"
+    state: link
+
+- name: Install alacritty terminal emulator
+  community.general.homebrew_cask:
+    name:
+      - alacritty
+    state: latest
+
+- name: Remove quarantine from `Alacritty.app`
+  ansible.builtin.command: xattr -d com.apple.quarantine /Applications/Alacritty.app
+  register: result
+  failed_when:
+    - result.rc != 0
+    - "'xattr: /Applications/Alacritty.app: No such xattr: com.apple.quarantine' not in result.stderr_lines"

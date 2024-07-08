@@ -1,0 +1,42 @@
+---
+- name: Create `$HOME/.gnupg` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.gnupg"
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `gpg.conf`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/gnupg/files/gpg.conf"
+    dest: "{{ ansible_env.HOME }}/.gnupg/gpg.conf"
+    state: link
+
+- name: Create symbolic link to `gpg-agent-arm64.conf`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/gnupg/files/gpg-agent-arm64.conf"
+    dest: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+    state: link
+  when: ansible_architecture == "arm64"
+
+- name: Create symbolic link to `gpg-agent-x86_64.conf`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/gnupg/files/gpg-agent-x86_64.conf"
+    dest: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+    state: link
+  when: ansible_architecture == "x86_64"
+
+- name: Create `$HOME/.config/zsh/.zshrc.d` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `50-gpg.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/gnupg/files/50-gpg.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/50-gpg.zsh"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

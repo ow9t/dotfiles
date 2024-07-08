@@ -1,0 +1,28 @@
+---
+- name: Create `$HOME/.config/alacritty` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/alacritty"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `alacritty.toml`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/terminal/files/alacritty.toml"
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
+    state: link
+
+- name: Create symbolic link to `gruvbox_dark.toml`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/terminal/files/gruvbox_dark.toml"
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/gruvbox_dark.toml"
+    state: link
+
+- name: Create symbolic link to `starship.toml`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/terminal/files/starship.toml"
+    dest: "{{ ansible_env.HOME }}/.config/starship.toml"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

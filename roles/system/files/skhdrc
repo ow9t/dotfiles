@@ -1,0 +1,3 @@
+cmd - h : skhd --key ""
+
+cmd - return : open -na /Applications/Alacritty.app

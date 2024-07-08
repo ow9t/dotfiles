@@ -1,0 +1,7 @@
+---
+- name: Install gnupg and pinentry-mac
+  community.general.homebrew:
+    name:
+      - gnupg
+      - pinentry-mac
+    state: latest

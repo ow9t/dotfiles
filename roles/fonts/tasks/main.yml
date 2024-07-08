@@ -1,0 +1,6 @@
+---
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'
+
+- import_tasks: dnf.yml
+  when: ansible_distribution == 'Fedora'

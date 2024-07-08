@@ -1,0 +1,12 @@
+---
+- name: Create `$HOME/.ssh` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to ssh config
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/ssh/files/ssh-config"
+    dest: "{{ ansible_env.HOME }}/.ssh/config"
+    state: link

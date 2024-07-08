@@ -1,0 +1,45 @@
+---
+- block:
+    - name: Check if homebrew is installed
+      community.general.homebrew:
+        update_homebrew: true
+      register: result
+      changed_when: result.msg != 'Homebrew would be updated.'
+      check_mode: true
+
+  rescue:
+    - name: Download homebrew install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/Homebrew/install/b6eff5e865baa2137981c21d75e23821b19ee5dc/install.sh
+        dest: /tmp/install.sh
+        checksum: sha256:67b0989bd0a404cdd32c1df20e3fb724b7c278c83a068fd5a16dac6f8d317a79
+
+    - name: Run install script
+      ansible.builtin.shell: 'NONINTERACTIVE=1 /bin/bash /tmp/install.sh'
+
+- name: Update homebrew
+  community.general.homebrew:
+    update_homebrew: true
+  register: result
+  changed_when: result.msg != 'Homebrew already up-to-date.'
+
+- name: Create `$HOME/.config/zsh/.zshrc.d` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `40-homebrew-arm64.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/homebrew/files/40-homebrew-arm64.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/40-homebrew.zsh"
+    state: link
+  when: ansible_architecture == "arm64"
+
+- name: Create symbolic link to `40-homebrew-x86_64.zsh`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/homebrew/files/40-homebrew-x86_64.zsh"
+    dest: "{{ ansible_env.HOME }}/.config/zsh/.zshrc.d/40-homebrew.zsh"
+    state: link
+  when: ansible_architecture == "x86_64"

@@ -1,0 +1,16 @@
+---
+- name: Create `$HOME/.config/git` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/git"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to git config
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/git/files/git-config"
+    dest: "{{ ansible_env.HOME }}/.config/git/config"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

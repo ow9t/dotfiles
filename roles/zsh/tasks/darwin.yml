@@ -1,0 +1,12 @@
+---
+- name: Install zsh and plugins with dependencies
+  community.general.homebrew:
+    name:
+      - fd
+      - fzf
+      - zoxide
+      - zsh
+      - zsh-history-substring-search
+      - zsh-syntax-highlighting
+      - zsh-vi-mode
+    state: latest

@@ -1,0 +1,16 @@
+---
+- name: Create `$HOME/.config/tmux` directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/tmux"
+    recurse: true
+    state: directory
+    mode: '0700'
+
+- name: Create symbolic link to `tmux.conf`
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/roles/tmux/files/tmux.conf"
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.conf"
+    state: link
+
+- import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'

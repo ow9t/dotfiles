@@ -1,0 +1,43 @@
+#!/usr/bin/env zsh
+
+typeset -TUx PATH path
+typeset -TUx FPATH fpath
+typeset -TUx MANPATH manpath
+typeset -TUx INFOPATH infopath
+
+###################
+# X Desktop Group #
+###################
+
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+##########
+# Editor #
+##########
+
+export EDITOR="/usr/bin/vi"
+export SUDO_EDITOR="/usr/bin/vi"
+
+##########
+# Locale #
+##########
+
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+#######
+# zsh #
+#######
+
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+#########
+# Apple #
+#########
+
+# Disable Apple Terminal session management
+# See https://apple.stackexchange.com/a/427568
+export SHELL_SESSIONS_DISABLE=1
